@@ -70,7 +70,7 @@ main() {
     )
 
     for file in "${root_dotfiles[@]}"; do
-        create_symlink "$DOTFILES_DIR/$file" "$HOME/.$file" || true
+        create_symlink "$DOTFILES_DIR/dots/$file" "$HOME/.$file" || true
     done
 
     for dir in "${config_dirs[@]}"; do
@@ -78,6 +78,7 @@ main() {
     done
 
     echo "🎉 Dotfiles installation completed!"
+    exec zsh
 }
 
 main "$@"

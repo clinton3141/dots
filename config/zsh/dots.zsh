@@ -47,7 +47,7 @@ doctor() {
     )
 
     for file in "${root_dotfiles[@]}"; do
-        check_symlink_health "$HOME/.$file" "$DOTFILES_DIR/$file" "~/.$file"
+        check_symlink_health "$HOME/.$file" "$DOTFILES_DIR/dots/$file" "~/.$file"
     done
 
     for dir in "${config_dirs[@]}"; do
