@@ -2,7 +2,7 @@
 
 set -e
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%x}}")" && pwd)"
+DOTFILES_DIR="${0:A:h}"
 
 check_target() {
     local target="$1"

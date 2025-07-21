@@ -12,11 +12,47 @@ check_symlink_health() {
                 echo "❌ $name points to wrong location: $current_source (expected: $expected_source)"
             fi
         else
-            echo "⚠️  $name exists but is not a symlink"
+            echo "⚠️ $name exists but is not a symlink"
         fi
     else
         echo "❌ $name is missing"
     fi
+}
+
+doctor() {
+    local DOTFILES_DIR="${${(%):-%x}:A:h:h:h}"
+    echo "🩺 Running dotfiles diagnostics..."
+    echo ""
+    echo "Checking for recommended tools..."
+    tools=("z" "fzf" "bat" "starship" "eza" "fd")
+    for tool in "${tools[@]}"; do
+        if command -v "$tool" >/dev/null 2>&1; then
+            echo "✅ $tool is installed"
+        else
+            echo "❌ $tool is NOT installed"
+        fi
+    done
+
+    echo ""
+    echo "Checking symlink health..."
+
+    root_dotfiles=(
+        "zshrc"
+        "tmux.conf"
+    )
+
+    config_dirs=(
+        "zsh"
+        "tmux"
+    )
+
+    for file in "${root_dotfiles[@]}"; do
+        check_symlink_health "$HOME/.$file" "$DOTFILES_DIR/$file" "~/.$file"
+    done
+
+    for dir in "${config_dirs[@]}"; do
+        check_symlink_health "$HOME/.config/$dir" "$DOTFILES_DIR/config/$dir" "~/.config/$dir"
+    done
 }
 
 function dots() {
@@ -26,39 +62,7 @@ function dots() {
             exec zsh
             ;;
         doctor|d)
-            echo "Running dotfiles diagnostics..."
-            echo ""
-            echo "Checking for recommended tools..."
-            tools=("z" "fzf" "bat" "starship" "eza" "fd")
-            for tool in "${tools[@]}"; do
-                if command -v "$tool" >/dev/null 2>&1; then
-                    echo "✅ $tool is installed"
-                else
-                    echo "❌ $tool is NOT installed"
-                fi
-            done
-
-            echo ""
-            echo "Checking symlink health..."
-            DOTFILES_DIR="$(realpath "$(dirname "${(%):-%x}")/../..")"
-
-            root_dotfiles=(
-                "zshrc"
-                "tmux.conf"
-            )
-
-            config_dirs=(
-                "zsh"
-                "tmux"
-            )
-
-            for file in "${root_dotfiles[@]}"; do
-                check_symlink_health "$HOME/.$file" "$DOTFILES_DIR/$file" "~/.$file"
-            done
-
-            for dir in "${config_dirs[@]}"; do
-                check_symlink_health "$HOME/.config/$dir" "$DOTFILES_DIR/config/$dir" "~/.config/$dir"
-            done
+            doctor
             ;;
         *)
             echo "Usage: dots {reload|doctor}"
