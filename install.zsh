@@ -34,7 +34,7 @@ create_symlink() {
     if [[ $result == 0 ]]; then
         echo "✅ $target is correctly linked"
     elif [[ $result == 1 ]]; then
-        echo "🔗 Creating $target..."
+        echo "🔗 Creating $target"
         ln -s "$source" "$target"
         echo "✅ $target created successfully"
     elif [[ $result == 2 ]]; then
@@ -43,9 +43,9 @@ create_symlink() {
 }
 
 main() {
-    echo "🚀 Starting dotfiles installation from $DOTFILES_DIR"
+    echo "🚀 Starting dotfiles installation"
 
-    echo "📦 Initializing and updating git submodules..."
+    echo "📦 Initializing and updating git submodules"
     git submodule update --init --recursive
     cd "$DOTFILES_DIR"
     git submodule update --init --recursive
@@ -76,6 +76,11 @@ main() {
     for dir in "${config_dirs[@]}"; do
         create_symlink "$DOTFILES_DIR/config/$dir" "$HOME/.config/$dir" || true
     done
+
+    echo ""
+    echo "⚠️ GIT CONFIG IS NOT YET AUTOMATED"
+    echo "💡 use 'dots doctor' to check recommended settings"
+    echo ""
 
     echo "🎉 Dotfiles installation completed!"
     exec zsh

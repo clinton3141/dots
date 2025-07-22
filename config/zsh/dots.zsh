@@ -22,10 +22,10 @@ check_symlink_health() {
 }
 
 doctor() {
-    echo "🩺 Running dotfiles diagnostics..."
+    echo "🩺 CHECKING DOTFILES HEALTH "
     echo ""
-    echo "Checking for recommended tools..."
-    tools=("z" "fzf" "bat" "starship" "eza" "fd")
+    echo "🔧 RECOMMENDED TOOLS"
+    tools=("z" "fzf" "bat" "starship" "eza" "fd" "delta")
     for tool in "${tools[@]}"; do
         if command -v "$tool" >/dev/null 2>&1; then
             echo "✅ $tool is installed"
@@ -35,7 +35,7 @@ doctor() {
     done
 
     echo ""
-    echo "Checking symlink health..."
+    echo "🔗 SYMLINKS"
 
     root_dotfiles=(
         "zshrc"
@@ -54,6 +54,14 @@ doctor() {
     for dir in "${config_dirs[@]}"; do
         check_symlink_health "$HOME/.config/$dir" "$DOTFILES_DIR/config/$dir" "~/.config/$dir"
     done
+
+    echo ""
+    echo "🐙 GIT"
+    if git config --global core.pager | grep -q "delta"; then
+        echo "✅ git core.pager is set to delta"
+    else
+        echo "❌ git core.pager is not set to delta"
+    fi
 }
 
 update() {
