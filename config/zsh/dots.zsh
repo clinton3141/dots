@@ -1,3 +1,5 @@
+local DOTFILES_DIR="${${(%):-%x}:A:h:h:h}"
+
 check_symlink_health() {
     local target="$1"
     local expected_source="$2"
@@ -20,7 +22,6 @@ check_symlink_health() {
 }
 
 doctor() {
-    local DOTFILES_DIR="${${(%):-%x}:A:h:h:h}"
     echo "🩺 Running dotfiles diagnostics..."
     echo ""
     echo "Checking for recommended tools..."
@@ -55,14 +56,28 @@ doctor() {
     done
 }
 
+update() {
+    echo "Updating dotfiles..."
+    git -C $DOTFILES_DIR pull
+    git -C $DOTFILES_DIR submodule update --init --recursive
+    echo "Dotfiles updated successfully."
+}
+
+reload() {
+    echo "Reloading zsh configuration..."
+    exec zsh
+}
+
 function dots() {
     case "$1" in
         reload|r)
-            echo "Reloading zsh configuration..."
-            exec zsh
+            reload
             ;;
         doctor|d)
             doctor
+            ;;
+        update|u)
+            update
             ;;
         *)
             echo "Usage: dots {reload|doctor}"
@@ -70,6 +85,7 @@ function dots() {
             echo "Available commands:"
             echo "  reload    Reload zsh configuration"
             echo "  doctor    Run dotfiles diagnostics"
+            echo "  update    Update dotfiles"
             return 1
             ;;
     esac
@@ -78,3 +94,4 @@ function dots() {
 alias ...='dots'
 alias .r='dots reload'
 alias .d='dots doctor'
+alias .u='dots update'
