@@ -25,3 +25,4 @@ This will:
 - `dots` or `...` is a utility to manage the project
   - `dots reload` - reloads the config. Aliased to `.r`
   - `dots doctor` - some simple health checks. Aliased to `.d`
+  - `dots update` - get the latest config. Aliased to `.u`
