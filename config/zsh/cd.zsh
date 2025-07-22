@@ -14,6 +14,8 @@ if command -v z >/dev/null 2>&1; then
     cd() {
         if [ $# -eq 0 ]; then
             builtin cd
+        elif [ "$1" = "-" ]; then
+            builtin cd -
         elif [ -d "$1" ]; then
             builtin cd "$@"
         else
