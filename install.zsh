@@ -46,9 +46,7 @@ main() {
     echo "🚀 Starting dotfiles installation"
 
     echo "📦 Initializing and updating git submodules"
-    git submodule update --init --recursive
-    cd "$DOTFILES_DIR"
-    git submodule update --init --recursive
+    git -C "$DOTFILES_DIR" submodule update --init --recursive
     echo "✅ Git submodules initialised"
 
     if [[ ! -d "$HOME/.config" ]]; then
