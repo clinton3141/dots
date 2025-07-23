@@ -58,19 +58,22 @@ doctor() {
     echo ""
     echo "🐙 GIT"
     if [[ "$(git config --global core.pager)" == "delta" ]]; then
-        echo "✅ git core.pager is set to delta"
+        echo "✅ core.pager is set to delta"
     else
-        echo "❌ git core.pager is not set to delta"
+        echo "❌ core.pager is not set to delta"
+        echo "fix by running: 'git config --global core.pager delta'"
     fi
     if [[ "$(git config --global interactive.diffFilter)" == "delta --color-only" ]]; then
-        echo "✅ git interactive.diffFilter is set to delta --color-only"
+        echo "✅ interactive.diffFilter is set to delta --color-only"
     else
-        echo "❌ git interactive.diffFilter is not set to delta --color-only"
+        echo "❌ interactive.diffFilter is not set to delta --color-only"
+        echo "fix by running: 'git config --global interactive.diffFilter \"delta --color-only\"'"
     fi
     if [[ "$(git config --global delta.navigate)" == "true" ]]; then
-        echo "✅ git delta.navigate is set to true"
+        echo "✅ delta.navigate is set to true"
     else
-        echo "❌ git delta.navigate is not set to true"
+        echo "❌ delta.navigate is not set to true"
+        echo "fix by running: 'git config --global delta.navigate true'"
     fi
 }
 
