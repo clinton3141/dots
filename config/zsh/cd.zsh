@@ -13,13 +13,13 @@ if command -v z >/dev/null 2>&1; then
     # use z for known paths, fallback to cd otherwise
     cd() {
         if [ $# -eq 0 ]; then
-            builtin cd
+            builtin cd && _z --add "$(pwd)"
         elif [ "$1" = "-" ]; then
-            builtin cd -
+            builtin cd - && _z --add "$(pwd)"
         elif [ -d "$1" ]; then
-            builtin cd "$@"
+            builtin cd "$@" && _z --add "$(pwd)"
         else
-            z "$@" 2>/dev/null || builtin cd "$@"
+            z "$@" 2>/dev/null || (builtin cd "$@" && _z --add "$(pwd)")
         fi
     }
 
