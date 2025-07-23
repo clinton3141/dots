@@ -19,6 +19,7 @@ This will:
 - `config/` - xdg style config directory files (`~/.config/`)
   - `zsh/` - zsh configuration modules
   - `tmux/` - tmux configuration
+- `custom/` - custom scripts and local overrides
 
 ## Tools
 
