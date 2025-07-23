@@ -25,7 +25,7 @@ doctor() {
     echo "🩺 CHECKING DOTFILES HEALTH "
     echo ""
     echo "🔧 RECOMMENDED TOOLS"
-    tools=("z" "fzf" "bat" "starship" "eza" "fd" "delta")
+    tools=("bat" "delta" "eza" "fd" "fzf" "gh" "nvim" "starship" "tmux" "z")
     for tool in "${tools[@]}"; do
         if command -v "$tool" >/dev/null 2>&1; then
             echo "✅ $tool is installed"
@@ -74,6 +74,22 @@ doctor() {
     else
         echo "❌ delta.navigate is not set to true"
         echo "fix by running: 'git config --global delta.navigate true'"
+    fi
+    echo ""
+    echo "🐙 GITHUB CLI"
+    if command -v "gh" >/dev/null 2>&1; then
+        if gh auth status >/dev/null 2>&1; then
+            echo "✅ gh is authenticated"
+        else
+            echo "❌ gh is not authenticated"
+            echo "fix by running: 'gh auth login'"
+        fi
+        if gh extension list | grep -q "github/gh-copilot"; then
+            echo "✅ gh copilot extension is installed"
+        else
+            echo "❌ gh copilot extension is not installed"
+            echo "fix by running: 'gh extension install github/gh-copilot'"
+        fi
     fi
 }
 
