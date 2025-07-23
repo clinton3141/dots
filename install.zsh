@@ -67,6 +67,15 @@ main() {
         "tmux"
     )
 
+    # Create dotfiles config directory for custom user configurations
+    if [[ ! -d "$HOME/.config/dots" ]]; then
+        echo "📁 Creating ~/.config/dots directory"
+        mkdir -p "$HOME/.config/dots"
+        echo "✅ Created ~/.config/dots directory"
+    else
+        echo "📁 ~/.config/dots directory already exists"
+    fi
+
     for file in "${root_dotfiles[@]}"; do
         create_symlink "$DOTFILES_DIR/dots/$file" "$HOME/.$file" || true
     done
@@ -74,6 +83,9 @@ main() {
     for dir in "${config_dirs[@]}"; do
         create_symlink "$DOTFILES_DIR/config/$dir" "$HOME/.config/$dir" || true
     done
+
+    # Link custom directory for user customizations
+    create_symlink "$DOTFILES_DIR/custom" "$HOME/.config/dots/custom" || true
 
     echo ""
     echo "⚠️ GIT CONFIG IS NOT YET AUTOMATED"

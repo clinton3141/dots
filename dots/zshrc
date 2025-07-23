@@ -1,5 +1,9 @@
-export PATH=$HOME/.docker/bin/:$HOME/.composer/vendor/bin:$PATH
-
+# core config
 for file in ~/.config/zsh/*.zsh; do
+    [ -r "$file" ] && source "$file"
+done
+
+# custom config
+for file in ~/.config/dots/custom/*.zsh; do
     [ -r "$file" ] && source "$file"
 done

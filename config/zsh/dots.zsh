@@ -55,6 +55,9 @@ doctor() {
         check_symlink_health "$HOME/.config/$dir" "$DOTFILES_DIR/config/$dir" "~/.config/$dir"
     done
 
+    # Check custom directory symlink
+    check_symlink_health "$HOME/.config/dots/custom" "$DOTFILES_DIR/custom" "~/.config/dots/custom"
+
     echo ""
     echo "🐙 GIT"
     if [[ "$(git config --global core.pager)" == "delta" ]]; then

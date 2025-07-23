@@ -1,0 +1,2 @@
+# Add additional items to the PATH
+#export PATH=~/bin:$PATH
