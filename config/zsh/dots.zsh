@@ -25,7 +25,7 @@ doctor() {
     echo "🩺 CHECKING DOTFILES HEALTH "
     echo ""
     echo "🔧 RECOMMENDED TOOLS"
-    tools=("bat" "delta" "eza" "fd" "fzf" "gh" "nvim" "starship" "tmux" "z")
+    tools=("bat" "code" "delta" "eza" "fd" "fzf" "gh" "jq" "nvim" "starship" "tmux" "z")
     for tool in "${tools[@]}"; do
         if command -v "$tool" >/dev/null 2>&1; then
             echo "✅ $tool is installed"
