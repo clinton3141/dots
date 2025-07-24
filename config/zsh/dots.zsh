@@ -78,6 +78,30 @@ doctor() {
         echo "❌ delta.navigate is not set to true"
         echo "fix by running: 'git config --global delta.navigate true'"
     fi
+    if [[ "$(git config --global pull.rebase)" == "true" ]]; then
+        echo "✅ pull.rebase is set to true"
+    else
+        echo "❌ pull.rebase is not set to true"
+        echo "fix by running: 'git config --global pull.rebase true'"
+    fi
+    if [[ "$(git config --global init.defaultBranch)" == "main" ]]; then
+        echo "✅ init.defaultBranch is set to main"
+    else
+        echo "❌ init.defaultBranch is not set to main"
+        echo "fix by running: 'git config --global init.defaultBranch main'"
+    fi
+    if [[ "$(git config --global rerere.enabled)" == "true" ]]; then
+        echo "✅ rerere.enabled is set to true"
+    else
+        echo "❌ rerere.enabled is not set to true"
+        echo "fix by running: 'git config --global rerere.enabled true'"
+    fi
+    if [[ "$(git config --global merge.conflictstyle)" == "diff3" ]]; then
+        echo "✅ merge.conflictstyle is set to diff3"
+    else
+        echo "❌ merge.conflictstyle is not set to diff3"
+        echo "fix by running: 'git config --global merge.conflictstyle diff3'"
+    fi
     echo ""
     echo "🐙 GITHUB CLI"
     if command -v "gh" >/dev/null 2>&1; then
