@@ -4,6 +4,6 @@ for file in ~/.config/zsh/*.zsh; do
 done
 
 # custom config
-for file in ~/.config/dots/custom/*.zsh; do
+for file in ~/.config/dots/custom/*.zsh(N); do
     [ -r "$file" ] && source "$file"
 done
