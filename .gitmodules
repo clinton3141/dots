@@ -1,6 +1,6 @@
 [submodule "config/tmux"]
 	path = config/tmux
-	url = git@github.com:clinton3141/.tmux.git
+	url = https://github.com/clinton3141/.tmux.git
 [submodule "config/zsh/plugins/zsh-autosuggestions"]
 	path = config/zsh/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
