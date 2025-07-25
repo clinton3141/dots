@@ -43,6 +43,12 @@ create_symlink() {
 }
 
 main() {
+    if ! command -v zsh >/dev/null 2>&1; then
+        echo "❌ FATAL ERROR: zsh is not installed on this system"
+        exit 1
+    fi
+    echo "✅ zsh is installed"
+
     echo "🚀 Starting dotfiles installation"
 
     echo "📦 Initializing and updating git submodules"
@@ -93,6 +99,13 @@ main() {
     echo ""
 
     echo "🎉 Dotfiles installation completed!"
+
+    if [[ "$SHELL" != "$(which zsh)" ]]; then
+        echo "🔧 Setting zsh as default shell"
+        chsh -s $(which zsh)
+    fi
+
+    echo "🔄 Restarting shell to apply changes"
     exec zsh
 }
 

@@ -121,14 +121,14 @@ doctor() {
 }
 
 update() {
-    echo "🏗️ Updating dotfiles..."
+    echo "🏗️ Updating dotfiles"
     git -C $DOTFILES_DIR pull
     git -C $DOTFILES_DIR submodule update --init --recursive
     echo "✅ Dotfiles updated successfully."
 }
 
 reload() {
-    echo "🪚 Reloading zsh configuration..."
+    echo "🪚 Reloading zsh configuration"
     exec zsh
 }
 
