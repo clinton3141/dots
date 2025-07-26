@@ -124,7 +124,14 @@ update() {
     echo "🏗️ Updating dotfiles"
     git -C $DOTFILES_DIR pull
     git -C $DOTFILES_DIR submodule update --init --recursive
-    echo "✅ Dotfiles updated successfully."
+    echo "✅ Dotfiles git repository updated"
+
+    echo "🔌 Updating Zinit and plugins"
+    zinit self-update
+    zinit update --all
+    echo "✅ Zinit and all plugins updated"
+
+    echo "✅ Dotfiles update completed."
 }
 
 reload() {

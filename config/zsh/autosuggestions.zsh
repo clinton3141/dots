@@ -1,1 +1,1 @@
-source ~/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+zinit load zsh-users/zsh-autosuggestions

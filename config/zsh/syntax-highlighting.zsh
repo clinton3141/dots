@@ -1,1 +1,1 @@
-source ~/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+zinit load zdharma-continuum/fast-syntax-highlighting

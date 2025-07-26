@@ -35,7 +35,7 @@ create_symlink() {
         echo "✅ $target is correctly linked"
     elif [[ $result == 1 ]]; then
         echo "🔗 Creating $target"
-        ln -s "$source" "$target"
+        command ln -s "$source" "$target"
         echo "✅ $target created successfully"
     elif [[ $result == 2 ]]; then
         echo "⚠️  $target exists but is not a symlink"
@@ -43,21 +43,43 @@ create_symlink() {
 }
 
 main() {
+    echo "📋 checking prerequisites"
     if ! command -v zsh >/dev/null 2>&1; then
         echo "❌ FATAL ERROR: zsh is not installed on this system"
         exit 1
     fi
     echo "✅ zsh is installed"
 
+    if [[ ! -f "$HOME/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
+        echo "🔌 zinit is required for zsh plugin management and performance optimization"
+        echo ""
+        read -q "?❓ Would you like to install zinit now? (y/n): "
+        echo ""
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo "📦 Installing zinit plugin manager..."
+            command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+            command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+                echo "✅ zinit installed successfully" || \
+                (echo "❌ zinit installation failed" && exit 1)
+        else
+            echo "❌ FATAL ERROR: zinit is required."
+            exit 1
+        fi
+    else
+        echo "✅ zinit is installed"
+    fi
+
+    echo ""
+
     echo "🚀 Starting dotfiles installation"
 
     echo "📦 Initializing and updating git submodules"
-    git -C "$DOTFILES_DIR" submodule update --init --recursive
+    command git -C "$DOTFILES_DIR" submodule update --init --recursive
     echo "✅ Git submodules initialised"
 
     if [[ ! -d "$HOME/.config" ]]; then
         echo "📁 Creating ~/.config directory"
-        mkdir -p "$HOME/.config"
+        command mkdir -p "$HOME/.config"
         echo "✅ Created ~/.config directory"
     else
         echo "📁 ~/.config directory already exists"
@@ -76,7 +98,7 @@ main() {
     # Create dotfiles config directory for custom user configurations
     if [[ ! -d "$HOME/.config/dots" ]]; then
         echo "📁 Creating ~/.config/dots directory"
-        mkdir -p "$HOME/.config/dots"
+        command mkdir -p "$HOME/.config/dots"
         echo "✅ Created ~/.config/dots directory"
     else
         echo "📁 ~/.config/dots directory already exists"
@@ -102,7 +124,7 @@ main() {
 
     if [[ "$SHELL" != "$(which zsh)" ]]; then
         echo "🔧 Setting zsh as default shell"
-        chsh -s $(which zsh)
+        command chsh -s $(which zsh)
     fi
 
     echo "🔄 Restarting shell to apply changes"

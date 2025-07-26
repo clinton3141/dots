@@ -1,4 +1,4 @@
-source ~/.config/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+zinit load zsh-users/zsh-history-substring-search
 
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
