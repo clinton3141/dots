@@ -4,6 +4,8 @@ set -e
 
 DOTFILES_DIR="${0:A:h}"
 
+source "$DOTFILES_DIR/dots/dots.lock"
+
 check_target() {
     local target="$1"
     local expected_source="$2"
@@ -73,9 +75,35 @@ main() {
 
     echo "🚀 Starting dotfiles installation"
 
-    echo "📦 Initializing and updating git submodules"
-    command git -C "$DOTFILES_DIR" submodule update --init --recursive
-    echo "✅ Git submodules initialised"
+    if command -v tmux >/dev/null 2>&1; then
+        echo "✅ tmux is installed"
+
+        if [[ ! -d "$DOTFILES_DIR/config/tmux/plugins/tpm" ]]; then
+            echo "📦 Installing tpm for tmux"
+            command git clone https://github.com/tmux-plugins/tpm "$DOTFILES_DIR/config/tmux/plugins/tpm"
+            echo "✅ tpm installed successfully"
+        else
+            echo "✅ tpm is already installed"
+        fi
+
+        command git -C "$DOTFILES_DIR/config/tmux/plugins/tpm" fetch
+        command git -C "$DOTFILES_DIR/config/tmux/plugins/tpm" checkout "$DOTS_TPM_HASH"
+
+        echo "📝 Generating tmux plugin configurations"
+
+        cat > "$DOTFILES_DIR/config/tmux/conf/plugins.conf" << EOF
+set -g @plugin 'loctvl842/monokai-pro.tmux#$DOTS_MONOKAI_PRO_HASH'
+
+set -g @plugin 'tmux-plugins/tmux-sensible#$DOTS_TMUX_SENSIBLE_HASH'
+
+set -g @plugin 'tmux-plugins/tpm#$DOTS_TPM_HASH'
+run '~/.config/tmux/plugins/tpm/tpm'
+EOF
+
+        echo "✅ tmux plugin configurations generated"
+    else
+        echo "⚠️  tmux is not installed - skipping tmux configuration"
+    fi
 
     if [[ ! -d "$HOME/.config" ]]; then
         echo "📁 Creating ~/.config directory"

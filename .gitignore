@@ -1,2 +1,4 @@
 .DS_Store
 custom
+config/tmux/plugins
+config/tmux/conf/plugins.conf

@@ -1,5 +1,7 @@
 local DOTFILES_DIR="${${(%):-%x}:A:h:h:h}"
 
+source "$DOTFILES_DIR/dots/dots.lock"
+
 check_symlink_health() {
     local target="$1"
     local expected_source="$2"
@@ -25,7 +27,7 @@ doctor() {
     echo "🩺 CHECKING DOTFILES HEALTH "
     echo ""
     echo "🔧 RECOMMENDED TOOLS"
-    tools=("bat" "code" "delta" "eza" "fd" "fzf" "gh" "jq" "nvim" "starship" "tmux" "zoxide")
+    local tools=("bat" "code" "delta" "eza" "fd" "fzf" "gh" "jq" "nvim" "starship" "tmux" "zoxide")
     for tool in "${tools[@]}"; do
         if command -v "$tool" >/dev/null 2>&1; then
             echo "✅ $tool is installed"
@@ -37,12 +39,12 @@ doctor() {
     echo ""
     echo "🔗 SYMLINKS"
 
-    root_dotfiles=(
+    local root_dotfiles=(
         "zshrc"
         "tmux.conf"
     )
 
-    config_dirs=(
+    local config_dirs=(
         "zsh"
         "tmux"
     )
@@ -57,6 +59,26 @@ doctor() {
 
     # Check custom directory symlink
     check_symlink_health "$HOME/.config/dots/custom" "$DOTFILES_DIR/custom" "~/.config/dots/custom"
+
+    echo ""
+    echo "📦 TMUX"
+    if command -v "tmux" >/dev/null 2>&1; then
+        if [[ -d "$DOTFILES_DIR/config/tmux/plugins/tpm" ]]; then
+            echo "✅ tpm is installed"
+        else
+            echo "❌ tpm is NOT installed"
+            echo "fix by running the install script or: 'git clone https://github.com/tmux-plugins/tpm $DOTFILES_DIR/config/tmux/plugins/tpm'"
+        fi
+
+
+        local tpm_current_hash="$(git -C "$DOTFILES_DIR/config/tmux/plugins/tpm" rev-parse HEAD 2>/dev/null)"
+        if [[ "$tpm_current_hash" == "$DOTS_TPM_HASH" ]]; then
+            echo "✅ tpm is at expected commit ($DOTS_TPM_HASH)"
+        else
+            echo "❌ tpm is at wrong commit: $tpm_current_hash (expected: $DOTS_TPM_HASH)"
+            echo "fix by running: 'git -C $DOTFILES_DIR/config/tmux/plugins/tpm checkout $DOTS_TPM_HASH'"
+        fi
+    fi
 
     echo ""
     echo "🐙 GIT"
