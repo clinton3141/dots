@@ -63,20 +63,34 @@ doctor() {
     echo ""
     echo "📦 TMUX"
     if command -v "tmux" >/dev/null 2>&1; then
-        if [[ -d "$DOTFILES_DIR/config/tmux/plugins/tpm" ]]; then
-            echo "✅ tpm is installed"
+        # Check tmux-sensible
+        if [[ -d "$DOTFILES_DIR/config/tmux/plugins/tmux-sensible" ]]; then
+            echo "✅ tmux-sensible is installed"
+            local sensible_current_hash="$(git -C "$DOTFILES_DIR/config/tmux/plugins/tmux-sensible" rev-parse HEAD 2>/dev/null)"
+            if [[ "$sensible_current_hash" == "$DOTS_TMUX_SENSIBLE_HASH" ]]; then
+                echo "✅ tmux-sensible is at expected commit ($DOTS_TMUX_SENSIBLE_HASH)"
+            else
+                echo "❌ tmux-sensible is at wrong commit: $sensible_current_hash (expected: $DOTS_TMUX_SENSIBLE_HASH)"
+                echo "fix by running: 'git -C $DOTFILES_DIR/config/tmux/plugins/tmux-sensible checkout $DOTS_TMUX_SENSIBLE_HASH'"
+            fi
         else
-            echo "❌ tpm is NOT installed"
-            echo "fix by running the install script or: 'git clone https://github.com/tmux-plugins/tpm $DOTFILES_DIR/config/tmux/plugins/tpm'"
+            echo "❌ tmux-sensible is NOT installed"
+            echo "fix by running the install script or: 'git clone https://github.com/tmux-plugins/tmux-sensible $DOTFILES_DIR/config/tmux/plugins/tmux-sensible'"
         fi
 
-
-        local tpm_current_hash="$(git -C "$DOTFILES_DIR/config/tmux/plugins/tpm" rev-parse HEAD 2>/dev/null)"
-        if [[ "$tpm_current_hash" == "$DOTS_TPM_HASH" ]]; then
-            echo "✅ tpm is at expected commit ($DOTS_TPM_HASH)"
+        # Check monokai-pro.tmux
+        if [[ -d "$DOTFILES_DIR/config/tmux/plugins/monokai-pro.tmux" ]]; then
+            echo "✅ monokai-pro.tmux is installed"
+            local monokai_current_hash="$(git -C "$DOTFILES_DIR/config/tmux/plugins/monokai-pro.tmux" rev-parse HEAD 2>/dev/null)"
+            if [[ "$monokai_current_hash" == "$DOTS_MONOKAI_PRO_HASH" ]]; then
+                echo "✅ monokai-pro.tmux is at expected commit ($DOTS_MONOKAI_PRO_HASH)"
+            else
+                echo "❌ monokai-pro.tmux is at wrong commit: $monokai_current_hash (expected: $DOTS_MONOKAI_PRO_HASH)"
+                echo "fix by running: 'git -C $DOTFILES_DIR/config/tmux/plugins/monokai-pro.tmux checkout $DOTS_MONOKAI_PRO_HASH'"
+            fi
         else
-            echo "❌ tpm is at wrong commit: $tpm_current_hash (expected: $DOTS_TPM_HASH)"
-            echo "fix by running: 'git -C $DOTFILES_DIR/config/tmux/plugins/tpm checkout $DOTS_TPM_HASH'"
+            echo "❌ monokai-pro.tmux is NOT installed"
+            echo "fix by running the install script or: 'git clone https://github.com/loctvl842/monokai-pro.tmux $DOTFILES_DIR/config/tmux/plugins/monokai-pro.tmux'"
         fi
     fi
 
@@ -145,7 +159,6 @@ doctor() {
 update() {
     echo "🏗️ Updating dotfiles"
     git -C $DOTFILES_DIR pull
-    git -C $DOTFILES_DIR submodule update --init --recursive
     echo "✅ Dotfiles git repository updated"
 
     echo "🔌 Updating Zinit and plugins"

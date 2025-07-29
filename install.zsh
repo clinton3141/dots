@@ -78,29 +78,28 @@ main() {
     if command -v tmux >/dev/null 2>&1; then
         echo "✅ tmux is installed"
 
-        if [[ ! -d "$DOTFILES_DIR/config/tmux/plugins/tpm" ]]; then
-            echo "📦 Installing tpm for tmux"
-            command git clone https://github.com/tmux-plugins/tpm "$DOTFILES_DIR/config/tmux/plugins/tpm"
-            echo "✅ tpm installed successfully"
+        echo "📦 Installing tmux plugins"
+
+        if [[ ! -d "$DOTFILES_DIR/config/tmux/plugins/tmux-sensible" ]]; then
+            echo "📦 Installing tmux-sensible"
+            command git clone https://github.com/tmux-plugins/tmux-sensible "$DOTFILES_DIR/config/tmux/plugins/tmux-sensible"
         else
-            echo "✅ tpm is already installed"
+            echo "✅ tmux-sensible is already installed"
         fi
+        command git -C "$DOTFILES_DIR/config/tmux/plugins/tmux-sensible" fetch
+        command git -C "$DOTFILES_DIR/config/tmux/plugins/tmux-sensible" checkout "$DOTS_TMUX_SENSIBLE_HASH"
+        echo "✅ tmux-sensible pinned to hash $DOTS_TMUX_SENSIBLE_HASH"
 
-        command git -C "$DOTFILES_DIR/config/tmux/plugins/tpm" fetch
-        command git -C "$DOTFILES_DIR/config/tmux/plugins/tpm" checkout "$DOTS_TPM_HASH"
-
-        echo "📝 Generating tmux plugin configurations"
-
-        cat > "$DOTFILES_DIR/config/tmux/conf/plugins.conf" << EOF
-set -g @plugin 'loctvl842/monokai-pro.tmux#$DOTS_MONOKAI_PRO_HASH'
-
-set -g @plugin 'tmux-plugins/tmux-sensible#$DOTS_TMUX_SENSIBLE_HASH'
-
-set -g @plugin 'tmux-plugins/tpm#$DOTS_TPM_HASH'
-run '~/.config/tmux/plugins/tpm/tpm'
-EOF
-
-        echo "✅ tmux plugin configurations generated"
+        # Install monokai-pro.tmux
+        if [[ ! -d "$DOTFILES_DIR/config/tmux/plugins/monokai-pro.tmux" ]]; then
+            echo "📦 Installing monokai-pro.tmux"
+            command git clone https://github.com/loctvl842/monokai-pro.tmux "$DOTFILES_DIR/config/tmux/plugins/monokai-pro.tmux"
+        else
+            echo "✅ monokai-pro.tmux is already installed"
+        fi
+        command git -C "$DOTFILES_DIR/config/tmux/plugins/monokai-pro.tmux" fetch
+        command git -C "$DOTFILES_DIR/config/tmux/plugins/monokai-pro.tmux" checkout "$DOTS_MONOKAI_PRO_HASH"
+        echo "✅ monokai-pro.tmux pinned to hash $DOTS_MONOKAI_PRO_HASH"
     else
         echo "⚠️  tmux is not installed - skipping tmux configuration"
     fi
