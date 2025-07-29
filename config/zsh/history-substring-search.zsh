@@ -1,3 +1,4 @@
+zinit ice ver"$DOTS_ZSH_HISTORY_SUBSTRING_SEARCH_HASH"
 zinit load zsh-users/zsh-history-substring-search
 
 bindkey '^[[A' history-substring-search-up
