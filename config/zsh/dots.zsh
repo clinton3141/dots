@@ -138,6 +138,13 @@ doctor() {
         echo "❌ merge.conflictstyle is not set to diff3"
         echo "fix by running: 'git config --global merge.conflictstyle diff3'"
     fi
+    if [[ "$(git config --global advice.detachedHead)" == "false" ]]; then
+        echo "✅ advice.detachedHead is set to false"
+    else
+        echo "❌ advice.detachedHead is not set to false"
+        echo "fix by running: 'git config --global advice.detachedHead false'"
+    fi
+
     echo ""
     echo "🐙 GITHUB CLI"
     if command -v "gh" >/dev/null 2>&1; then
