@@ -1,10 +1,10 @@
 if command -v eza >/dev/null 2>&1; then
-    alias ls='eza --color=auto --group-directories-first --icons'
-    alias ll='eza -l --color=auto --group-directories-first --icons'
-    alias la='eza -lah --color=auto --group-directories-first --icons'
-    alias lt='eza --tree --color=auto --group-directories-first --icons'
-    alias lg='eza -l --git --color=auto --group-directories-first --icons'
-    alias lh='eza -la --header --color=auto --group-directories-first --icons'
+    alias ls='eza --color=auto --group-directories-first --icons always'
+    alias ll='eza -l --color=auto --group-directories-first --icons always'
+    alias la='eza -lah --color=auto --group-directories-first --icons always'
+    alias lt='eza --tree --color=auto --group-directories-first --icons always'
+    alias lg='eza -l --git --color=auto --group-directories-first --icons always'
+    alias lh='eza -la --header --color=auto --group-directories-first --icons always'
 else
     # Fallback to standard ls with color output if available
     if command -v ls > /dev/null; then
