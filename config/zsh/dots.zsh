@@ -44,17 +44,18 @@ doctor() {
         "tmux.conf"
     )
 
-    local config_dirs=(
+    local configs=(
         "zsh"
         "tmux"
+        "starship.toml"
     )
 
     for file in "${root_dotfiles[@]}"; do
         check_symlink_health "$HOME/.$file" "$DOTFILES_DIR/dots/$file" "~/.$file"
     done
 
-    for dir in "${config_dirs[@]}"; do
-        check_symlink_health "$HOME/.config/$dir" "$DOTFILES_DIR/config/$dir" "~/.config/$dir"
+    for config in "${configs[@]}"; do
+        check_symlink_health "$HOME/.config/$config" "$DOTFILES_DIR/config/$config" "~/.config/$config"
     done
 
     # Check custom directory symlink
