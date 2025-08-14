@@ -35,6 +35,22 @@ doctor() {
             echo "❌ $tool is NOT installed"
         fi
     done
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        if brew list zsh-completions >/dev/null 2>&1; then
+            echo "✅ zsh-completions is installed (via Homebrew)"
+        else
+            echo "❌ zsh-completions is NOT installed (via Homebrew)"
+            echo "fix by running: 'brew install zsh-completions'"
+        fi
+    else
+        # Check common locations for zsh-completions
+        if [[ -d "/usr/share/zsh-completions" ]] || [[ -d "/usr/share/zsh/plugins/zsh-completions" ]] || [[ -d "/usr/local/share/zsh-completions" ]]; then
+            echo "✅ zsh-completions is installed"
+        else
+            echo "❌ zsh-completions is NOT installed"
+            echo "fix it by installing zsh-completions with your package manager"
+        fi
+    fi
 
     echo ""
     echo "🔗 SYMLINKS"
