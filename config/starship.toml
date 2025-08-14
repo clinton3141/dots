@@ -2,7 +2,6 @@
 
 format = """
 [](color_orange)\
-$os\
 $username\
 [](bg:color_yellow fg:color_orange)\
 $directory\
@@ -101,7 +100,7 @@ format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
 [nodejs]
 symbol = ""
 style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol ](fg:color_fg0 bg:color_blue)]($style)'
 
 [c]
 symbol = " "
@@ -126,7 +125,7 @@ format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 [php]
 symbol = ""
 style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+format = '[[ $symbol ](fg:color_fg0 bg:color_blue)]($style)'
 
 [java]
 symbol = ""
