@@ -178,6 +178,30 @@ doctor() {
             echo "fix by running: 'gh extension install github/gh-copilot'"
         fi
     fi
+
+    if command -v "starship" >/dev/null 2>&1; then
+        echo ""
+        echo "🚀 STARSHIP PERFORMANCE"
+        local timings_output total_ms
+        timings_output="$(starship timings 2>/dev/null)"
+        if [[ -n "$timings_output" ]]; then
+            echo "$timings_output"
+            total_ms=$(echo "$timings_output" | grep 'git_status' | grep -o '[0-9]+')
+            if [[ "$total_ms" =~ ^[0-9]+$ ]] && (( total_ms > 2 )); then
+                echo "❌ starship is slow: total time ${total_ms}ms (>200ms)"
+                echo "Suggestions to improve git performance (especially for large repos):"
+                echo "  git config feature.manyFiles true"
+                echo "  git update-index --index-version 4"
+                echo "  git config core.fsmonitor true"
+                echo "     confirm with: git fsmonitor--daemon status"
+                echo "  git config core.untrackedcache true"
+            else
+                echo "✅ starship timings: total time ${total_ms}ms"
+            fi
+        else
+            echo "⚠️ Could not get starship timings"
+        fi
+    fi
 }
 
 update() {
