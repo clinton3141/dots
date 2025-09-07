@@ -9,6 +9,8 @@ export FZF_DEFAULT_OPTS="
     --color=bg+:#1d1f21,bg:#282a36,spinner:#bd93f9,hl:#8be9fd
 "
 
+export FZF_COMPLETION_TRIGGER='**'
+
 # Use fd (if available) for fzf file search
 if command -v fd > /dev/null; then
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
