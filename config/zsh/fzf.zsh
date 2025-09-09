@@ -10,6 +10,8 @@ export FZF_DEFAULT_OPTS="
     --border
     --preview 'command -v bat >/dev/null && bat --style=numbers --color=always --line-range :500 {} 2>/dev/null || cat {}'
     --preview-window=right:60%
+    --bind 'ctrl-y:preview-up'
+    --bind 'ctrl-e:preview-down'
     --color=bg+:#1d1f21,bg:#282a36,spinner:#bd93f9,hl:#8be9fd
 "
 
