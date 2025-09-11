@@ -63,6 +63,7 @@ doctor() {
     local configs=(
         "zsh"
         "tmux"
+        "zsh-abbr"
         "starship.toml"
     )
 
