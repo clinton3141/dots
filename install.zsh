@@ -120,6 +120,7 @@ main() {
     configs=(
         "zsh"
         "tmux"
+        "zsh-abbr"
         "starship.toml"
     )
 
