@@ -26,4 +26,4 @@ elif command -v fd > /dev/null; then
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
-[ -n "$FZF_TMUX" ] || export FZF_TMUX=1
+[ -n "$TMUX" ] && export FZF_TMUX=1 || export FZF_TMUX=0
