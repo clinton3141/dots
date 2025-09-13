@@ -18,6 +18,3 @@ else
     alias ll='ls -l'
     alias la='ls -lah'
 fi
-
-# Enable colours for completion matches (if using zsh completion)
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
