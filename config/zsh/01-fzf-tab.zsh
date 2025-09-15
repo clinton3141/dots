@@ -1,4 +1,5 @@
-zinit light Aloxaf/fzf-tab
+zinit ice wait"0" lucid ver"$DOTS_FZF_TAB_HASH"
+zinit load Aloxaf/fzf-tab
 
 zstyle ':completion:*' menu no
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
@@ -20,7 +21,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath 2>/
 
 zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':fzf-tab:*' show-group full
-zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
+zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:down,shift-tab:up,ctrl-y:preview-up,ctrl-e:preview-down
 
 # Switch group using '<' and '>'
 zstyle ':fzf-tab:*' switch-group '<' '>'
