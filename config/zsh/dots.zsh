@@ -233,6 +233,7 @@ function dots() {
             ;;
         update|u)
             update
+            reload
             ;;
         *)
             echo "Usage: dots {reload|doctor}"
