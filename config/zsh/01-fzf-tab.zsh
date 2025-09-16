@@ -31,7 +31,8 @@ zstyle ':fzf-tab:*' fzf-flags \
     --bind=tab:down,shift-tab:up \
     --bind=ctrl-y:preview-up,ctrl-e:preview-down \
     --bind=ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down \
-    --bind=ctrl-f:page-down,ctrl-b:page-up
+    --bind=ctrl-f:page-down,ctrl-b:page-up \
+    --bind=ctrl-space:toggle,ctrl-a:select-all,ctrl-d:deselect-all
 
 zstyle ':fzf-tab:complete:*:*' fzf-preview '
     if [[ -f $realpath ]]; then
