@@ -15,6 +15,10 @@ export FZF_DEFAULT_OPTS="
     --color=bg+:#1d1f21,bg:#282a36,spinner:#bd93f9,hl:#8be9fd
 "
 
+if [[ -n "$TMUX" ]]; then
+    export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --tmux bottom,40%"
+fi
+
 export FZF_COMPLETION_TRIGGER='**'
 
 # Use rg > fd for file search (rg is faster for large repos)

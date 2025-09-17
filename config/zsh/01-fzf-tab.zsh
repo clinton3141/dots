@@ -14,25 +14,49 @@ zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':fzf-tab:*' show-group full
 zstyle ':fzf-tab:*' switch-group '<' '>'
 
-zstyle ':fzf-tab:*' fzf-flags \
-    --ansi \
-    --color=bg:#1d2021,fg:#fbf1c7 \
-    --color=bg+:#3c3836,fg+:#fbf1c7 \
-    --color=hl:yellow,hl+:yellow \
-    --color=info:cyan,border:#665c54 \
-    --color=prompt:red,pointer:red \
-    --color=marker:green,spinner:cyan \
-    --color=header:cyan,gutter:#1d2021 \
-    --color=query:#fbf1c7:regular \
-    --border=rounded \
-    --height=80% \
-    --layout=reverse \
-    --preview-window=right:50%:wrap \
-    --bind=tab:down,shift-tab:up \
-    --bind=ctrl-y:preview-up,ctrl-e:preview-down \
-    --bind=ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down \
-    --bind=ctrl-f:page-down,ctrl-b:page-up \
-    --bind=ctrl-space:toggle,ctrl-a:select-all,ctrl-d:deselect-all
+if [[ -n "$TMUX" ]]; then
+    # Use tmux popup
+    zstyle ':fzf-tab:*' fzf-flags \
+        --ansi \
+        --color=bg:#1d2021,fg:#fbf1c7 \
+        --color=bg+:#3c3836,fg+:#fbf1c7 \
+        --color=hl:yellow,hl+:yellow \
+        --color=info:cyan,border:#665c54 \
+        --color=prompt:red,pointer:red \
+        --color=marker:green,spinner:cyan \
+        --color=header:cyan,gutter:#1d2021 \
+        --color=query:#fbf1c7:regular \
+        --border=rounded \
+        --height=80% \
+        --layout=reverse \
+        --preview-window=right:50%:wrap \
+        --bind=tab:down,shift-tab:up \
+        --bind=ctrl-y:preview-up,ctrl-e:preview-down \
+        --bind=ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down \
+        --bind=ctrl-f:page-down,ctrl-b:page-up \
+        --bind=ctrl-space:toggle,ctrl-a:select-all,ctrl-d:deselect-all \
+        --tmux bottom,40%
+else
+    zstyle ':fzf-tab:*' fzf-flags \
+        --ansi \
+        --color=bg:#1d2021,fg:#fbf1c7 \
+        --color=bg+:#3c3836,fg+:#fbf1c7 \
+        --color=hl:yellow,hl+:yellow \
+        --color=info:cyan,border:#665c54 \
+        --color=prompt:red,pointer:red \
+        --color=marker:green,spinner:cyan \
+        --color=header:cyan,gutter:#1d2021 \
+        --color=query:#fbf1c7:regular \
+        --border=rounded \
+        --height=80% \
+        --layout=reverse \
+        --preview-window=right:50%:wrap \
+        --bind=tab:down,shift-tab:up \
+        --bind=ctrl-y:preview-up,ctrl-e:preview-down \
+        --bind=ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down \
+        --bind=ctrl-f:page-down,ctrl-b:page-up \
+        --bind=ctrl-space:toggle,ctrl-a:select-all,ctrl-d:deselect-all
+fi
 
 zstyle ':fzf-tab:complete:*:*' fzf-preview '
     if [[ -f $realpath ]]; then
