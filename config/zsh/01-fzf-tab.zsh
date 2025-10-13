@@ -73,11 +73,38 @@ zstyle ':fzf-tab:complete:*:*' fzf-preview '
         fi
     fi'
 
-zstyle ':fzf-tab:complete:(cd|ls):*' fzf-preview '
-    if (( $+commands[eza] )); then
-        eza -1 --color=always --icons $realpath 2>/dev/null
+zstyle ':fzf-tab:complete:(cd|ls|__zoxide_z):*' fzf-preview '
+    if [[ -d $realpath ]]; then
+        # Show enhanced preview for directories
+        echo "📂 Directory: ${realpath/$HOME/~}"
+        echo ""
+
+        # Show directory contents
+        if (( $+commands[eza] )); then
+            echo "📋 Contents:"
+            eza -la --color=always --icons --group-directories-first $realpath 2>/dev/null | head -30
+        else
+            echo "📋 Contents:"
+            ls -lah --color=always $realpath 2>/dev/null | head -30
+        fi
+
+        # Show git info if available
+        if [[ -d "$realpath/.git" ]] || git -C "$realpath" rev-parse --git-dir >/dev/null 2>&1; then
+            echo ""
+            echo "🌿 Git branch: $(git -C "$realpath" branch --show-current 2>/dev/null)"
+            local git_status=$(git -C "$realpath" status --short 2>/dev/null | head -5)
+            if [[ -n "$git_status" ]]; then
+                echo "📝 Changes:"
+                echo "$git_status"
+            fi
+        fi
     else
-        ls -1 --color=always $realpath 2>/dev/null
+        # Fallback for non-directories
+        if (( $+commands[eza] )); then
+            eza -1 --color=always --icons $realpath 2>/dev/null
+        else
+            ls -1 --color=always $realpath 2>/dev/null
+        fi
     fi'
 
 zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
