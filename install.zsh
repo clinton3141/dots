@@ -5,6 +5,25 @@ set -e
 DOTFILES_DIR="${0:A:h}"
 
 source "$DOTFILES_DIR/dots/dots.lock"
+source "$DOTFILES_DIR/lib/trial.zsh"
+
+# Parse command line arguments
+TRIAL_MODE=false
+for arg in "$@"; do
+    case "$arg" in
+        --trial)
+            TRIAL_MODE=true
+            ;;
+        --help|-h)
+            echo "Usage: $0 [--trial]"
+            echo ""
+            echo "Options:"
+            echo "  --trial    Install in trial mode (backs up existing dotfiles)"
+            echo "  --help     Show this help message"
+            exit 0
+            ;;
+    esac
+done
 
 check_target() {
     local target="$1"
@@ -40,11 +59,38 @@ create_symlink() {
         command ln -s "$source" "$target"
         echo "✅ $target created successfully"
     elif [[ $result == 2 ]]; then
-        echo "⚠️  $target exists but is not a symlink"
+        if [[ "$TRIAL_MODE" == true ]]; then
+            echo "📦 $target exists - backing up before replacing"
+            backup_existing "$target"
+            echo "🔗 Creating $target"
+            command ln -s "$source" "$target"
+            echo "✅ $target created successfully"
+        else
+            echo "⚠️  $target exists but is not a symlink"
+        fi
     fi
 }
 
 main() {
+    # Check if already in trial mode
+    if is_trial_mode && [[ "$TRIAL_MODE" == true ]]; then
+        echo "⚠️  System is already in trial mode"
+        echo "   Use 'dots finalize' to make installation permanent"
+        echo "   Or use 'dots uninstall' to restore original dotfiles"
+        exit 1
+    fi
+
+    # Initialize trial mode if requested
+    if [[ "$TRIAL_MODE" == true ]]; then
+        echo "🧪 Installing in TRIAL MODE"
+        echo "   Your existing dotfiles will be backed up"
+        echo "   Use 'dots finalize' to make installation permanent"
+        echo "   Or use 'dots uninstall' to restore your original setup"
+        echo ""
+        init_trial
+        echo ""
+    fi
+
     echo "📋 checking prerequisites"
     if ! command -v zsh >/dev/null 2>&1; then
         echo "❌ FATAL ERROR: zsh is not installed on this system"
@@ -150,6 +196,17 @@ main() {
     echo ""
 
     echo "🎉 Dotfiles installation completed!"
+
+    if [[ "$TRIAL_MODE" == true ]]; then
+        echo ""
+        echo "🧪 TRIAL MODE ACTIVE"
+        echo "   Your original dotfiles have been backed up"
+        echo "   Next steps:"
+        echo "     • Use the dotfiles for a while to see if you like them"
+        echo "     • Run 'dots finalize' to make the installation permanent"
+        echo "     • Run 'dots uninstall' to restore your original setup"
+        echo ""
+    fi
 
     if [[ "$SHELL" != "$(which zsh)" ]]; then
         echo "🔧 Setting zsh as default shell"
