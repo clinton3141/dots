@@ -7,7 +7,6 @@ DOTFILES_DIR="${0:A:h}"
 source "$DOTFILES_DIR/dots/dots.lock"
 source "$DOTFILES_DIR/lib/trial.zsh"
 
-# Parse command line arguments
 TRIAL_MODE=false
 for arg in "$@"; do
     case "$arg" in
@@ -72,21 +71,13 @@ create_symlink() {
 }
 
 main() {
-    # Check if already in trial mode
     if is_trial_mode && [[ "$TRIAL_MODE" == true ]]; then
-        echo "⚠️  System is already in trial mode"
-        echo "   Use 'dots finalize' to make installation permanent"
-        echo "   Or use 'dots uninstall' to restore original dotfiles"
+        echo "❌ Already in trial mode"
         exit 1
     fi
 
-    # Initialize trial mode if requested
     if [[ "$TRIAL_MODE" == true ]]; then
-        echo "🧪 Installing in TRIAL MODE"
-        echo "   Your existing dotfiles will be backed up"
-        echo "   Use 'dots finalize' to make installation permanent"
-        echo "   Or use 'dots uninstall' to restore your original setup"
-        echo ""
+        echo "🧪 Installing in trial mode"
         init_trial
         echo ""
     fi
@@ -170,7 +161,6 @@ main() {
         "starship.toml"
     )
 
-    # Create dotfiles config directory for custom user configurations
     if [[ ! -d "$HOME/.config/dots" ]]; then
         echo "📁 Creating ~/.config/dots directory"
         command mkdir -p "$HOME/.config/dots"
@@ -187,7 +177,6 @@ main() {
         create_symlink "$DOTFILES_DIR/config/$config" "$HOME/.config/$config" || true
     done
 
-    # Link custom directory for user customizations
     create_symlink "$DOTFILES_DIR/custom" "$HOME/.config/dots/custom" || true
 
     echo ""
@@ -199,12 +188,7 @@ main() {
 
     if [[ "$TRIAL_MODE" == true ]]; then
         echo ""
-        echo "🧪 TRIAL MODE ACTIVE"
-        echo "   Your original dotfiles have been backed up"
-        echo "   Next steps:"
-        echo "     • Use the dotfiles for a while to see if you like them"
-        echo "     • Run 'dots finalize' to make the installation permanent"
-        echo "     • Run 'dots uninstall' to restore your original setup"
+        echo "🧪 Trial mode active - run 'dots cement' or 'dots uninstall' when ready"
         echo ""
     fi
 

@@ -2,6 +2,8 @@ local DOTFILES_DIR="${${(%):-%x}:A:h:h:h}"
 
 source "$DOTFILES_DIR/dots/dots.lock"
 source "$DOTFILES_DIR/lib/trial.zsh"
+source "$DOTFILES_DIR/lib/cement.zsh"
+source "$DOTFILES_DIR/lib/uninstall.zsh"
 
 check_symlink_health() {
     local target="$1"
@@ -27,15 +29,6 @@ check_symlink_health() {
 doctor() {
     echo "🩺 CHECKING DOTFILES HEALTH "
     echo ""
-
-    # Check trial mode status
-    if is_trial_mode; then
-        echo "🧪 TRIAL MODE STATUS"
-        get_trial_status
-        echo "   💡 Run 'dots finalize' to make installation permanent"
-        echo "   💡 Run 'dots uninstall' to restore original dotfiles"
-        echo ""
-    fi
 
     echo "🔧 RECOMMENDED TOOLS"
     local tools=("bat" "code" "delta" "eza" "fd" "fzf" "gh" "jq" "nvim" "starship" "tmux" "zoxide")
@@ -214,6 +207,12 @@ doctor() {
             echo "⚠️ Could not get starship timings"
         fi
     fi
+
+    if is_trial_mode; then
+        echo "🧪 TRIAL MODE"
+        get_trial_status
+        echo ""
+    fi
 }
 
 update() {
@@ -246,43 +245,14 @@ function dots() {
             update
             reload
             ;;
-        finalize)
-            if ! is_trial_mode; then
-                echo "❌ Not in trial mode"
-                return 1
-            fi
-            finalize_trial
+        cement)
+            cement
             ;;
         uninstall)
-            if ! is_trial_mode; then
-                echo "❌ Not in trial mode"
-                echo "💡 Trial mode is used to safely try dotfiles with the ability to uninstall"
-                echo "   If you want to manually remove the dotfiles, delete the symlinks:"
-                echo "     ~/.zshrc, ~/.tmux.conf, ~/.config/zsh, ~/.config/tmux, etc."
-                return 1
-            fi
-            echo "⚠️  This will remove the dotfiles and restore your original configuration"
-            echo -n "Are you sure? (y/N): "
-            read -r response
-            if [[ "$response" =~ ^[Yy]$ ]]; then
-                restore_trial
-                echo ""
-                echo "👋 Dotfiles have been uninstalled. Your original setup has been restored."
-                echo "   Reloading shell..."
-                exec zsh
-            else
-                echo "Cancelled."
-            fi
+            uninstall
             ;;
         *)
-            echo "Usage: dots {reload|doctor|update|finalize|uninstall}"
-            echo ""
-            echo "Available commands:"
-            echo "  reload      Reload zsh configuration"
-            echo "  doctor      Run dotfiles diagnostics"
-            echo "  update      Update dotfiles"
-            echo "  finalize    Finalize trial mode (make installation permanent)"
-            echo "  uninstall   Uninstall dotfiles and restore original setup (trial mode only)"
+            echo "Usage: dots {reload|doctor|update|cement|uninstall}"
             return 1
             ;;
     esac

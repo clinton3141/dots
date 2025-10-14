@@ -33,17 +33,23 @@ This will:
 
 - **If you like them:** Make the installation permanent
   ```bash
-  dots finalize
-  # or
-  ./finalize.zsh
+  dots cement
   ```
 
 - **If you want to go back:** Restore your original dotfiles
   ```bash
   dots uninstall
-  # or
-  ./uninstall.zsh
   ```
+
+Trial mode allows you to safely test these dotfiles without permanently changing your system.
+
+### How it works:
+
+1. **Install with `--trial` flag**: Your existing dotfiles are backed up
+2. **Try it out**: Use the configuration normally
+3. **Decide**:
+   - Like it? → `dots cement` (completes trial, removes backup, keeps new config)
+   - Don't like it? → `dots uninstall` (restores your original setup)
 
 ## Structure
 
@@ -60,28 +66,5 @@ This will:
   - `dots reload` - reloads the config. Aliased to `.r`
   - `dots doctor` - some simple health checks. Aliased to `.d`
   - `dots update` - get the latest config. Aliased to `.u`
-  - `dots finalize` - finalize trial mode (make installation permanent)
+  - `dots cement` - complete trial and commit to dotfiles (make installation permanent)
   - `dots uninstall` - uninstall dotfiles and restore original setup (trial mode only)
-
-## Trial Mode
-
-Trial mode allows you to safely test these dotfiles without permanently changing your system.
-
-### How it works:
-
-1. **Install with `--trial` flag**: Your existing dotfiles are backed up
-2. **Try it out**: Use the configuration normally
-3. **Decide**:
-   - Like it? → `dots finalize` (removes backup, keeps new config)
-   - Don't like it? → `dots uninstall` (restores your original setup)
-
-### Checking trial status:
-
-Run `dots doctor` to see if you're in trial mode and view backup information.
-
-### Safety notes:
-
-- Backups are stored in `~/.config/dots/backup-{timestamp}/`
-- The trial lock file is at `~/.config/dots/trial.lock`
-- You cannot run `./install.zsh --trial` again while already in trial mode
-- Running `dots uninstall` outside of trial mode will show instructions for manual removal
