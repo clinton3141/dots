@@ -46,8 +46,7 @@ Trial mode allows you to safely test these dotfiles without permanently changing
 ### How it works:
 
 1. **Install with `--trial` flag**: Your existing dotfiles are backed up
-2. **Try it out**: Use the configuration normally
-3. **Decide**:
+2. **Decide**:
    - Like it? → `dots cement` (completes trial, removes backup, keeps new config)
    - Don't like it? → `dots uninstall` (restores your original setup)
 
