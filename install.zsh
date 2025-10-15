@@ -5,6 +5,24 @@ set -e
 DOTFILES_DIR="${0:A:h}"
 
 source "$DOTFILES_DIR/dots/dots.lock"
+source "$DOTFILES_DIR/lib/trial.zsh"
+
+TRIAL_MODE=false
+for arg in "$@"; do
+    case "$arg" in
+        --trial)
+            TRIAL_MODE=true
+            ;;
+        --help|-h)
+            echo "Usage: $0 [--trial]"
+            echo ""
+            echo "Options:"
+            echo "  --trial    Install in trial mode (backs up existing dotfiles)"
+            echo "  --help     Show this help message"
+            exit 0
+            ;;
+    esac
+done
 
 check_target() {
     local target="$1"
@@ -40,11 +58,30 @@ create_symlink() {
         command ln -s "$source" "$target"
         echo "✅ $target created successfully"
     elif [[ $result == 2 ]]; then
-        echo "⚠️  $target exists but is not a symlink"
+        if [[ "$TRIAL_MODE" == true ]]; then
+            echo "📦 $target exists - backing up before replacing"
+            backup_existing "$target"
+            echo "🔗 Creating $target"
+            command ln -s "$source" "$target"
+            echo "✅ $target created successfully"
+        else
+            echo "⚠️  $target exists but is not a symlink"
+        fi
     fi
 }
 
 main() {
+    if is_trial_mode && [[ "$TRIAL_MODE" == true ]]; then
+        echo "❌ Already in trial mode"
+        exit 1
+    fi
+
+    if [[ "$TRIAL_MODE" == true ]]; then
+        echo "🧪 Installing in trial mode"
+        init_trial
+        echo ""
+    fi
+
     echo "📋 checking prerequisites"
     if ! command -v zsh >/dev/null 2>&1; then
         echo "❌ FATAL ERROR: zsh is not installed on this system"
@@ -124,7 +161,6 @@ main() {
         "starship.toml"
     )
 
-    # Create dotfiles config directory for custom user configurations
     if [[ ! -d "$HOME/.config/dots" ]]; then
         echo "📁 Creating ~/.config/dots directory"
         command mkdir -p "$HOME/.config/dots"
@@ -141,7 +177,6 @@ main() {
         create_symlink "$DOTFILES_DIR/config/$config" "$HOME/.config/$config" || true
     done
 
-    # Link custom directory for user customizations
     create_symlink "$DOTFILES_DIR/custom" "$HOME/.config/dots/custom" || true
 
     echo ""
@@ -150,6 +185,12 @@ main() {
     echo ""
 
     echo "🎉 Dotfiles installation completed!"
+
+    if [[ "$TRIAL_MODE" == true ]]; then
+        echo ""
+        echo "🧪 Trial mode active - run 'dots cement' or 'dots uninstall' when ready"
+        echo ""
+    fi
 
     if [[ "$SHELL" != "$(which zsh)" ]]; then
         echo "🔧 Setting zsh as default shell"

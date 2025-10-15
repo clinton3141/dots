@@ -1,6 +1,9 @@
 local DOTFILES_DIR="${${(%):-%x}:A:h:h:h}"
 
 source "$DOTFILES_DIR/dots/dots.lock"
+source "$DOTFILES_DIR/lib/trial.zsh"
+source "$DOTFILES_DIR/lib/cement.zsh"
+source "$DOTFILES_DIR/lib/uninstall.zsh"
 
 check_symlink_health() {
     local target="$1"
@@ -26,6 +29,7 @@ check_symlink_health() {
 doctor() {
     echo "🩺 CHECKING DOTFILES HEALTH "
     echo ""
+
     echo "🔧 RECOMMENDED TOOLS"
     local tools=("bat" "code" "delta" "eza" "fd" "fzf" "gh" "jq" "nvim" "starship" "tmux" "zoxide")
     for tool in "${tools[@]}"; do
@@ -203,6 +207,12 @@ doctor() {
             echo "⚠️ Could not get starship timings"
         fi
     fi
+
+    if is_trial_mode; then
+        echo "🧪 TRIAL MODE"
+        get_trial_status
+        echo ""
+    fi
 }
 
 update() {
@@ -235,13 +245,14 @@ function dots() {
             update
             reload
             ;;
+        cement)
+            cement
+            ;;
+        uninstall)
+            uninstall
+            ;;
         *)
-            echo "Usage: dots {reload|doctor}"
-            echo ""
-            echo "Available commands:"
-            echo "  reload    Reload zsh configuration"
-            echo "  doctor    Run dotfiles diagnostics"
-            echo "  update    Update dotfiles"
+            echo "Usage: dots {reload|doctor|update|cement|uninstall}"
             return 1
             ;;
     esac
