@@ -283,11 +283,11 @@ function dots() {
             echo ""
             echo "Commands:"
             echo "  reload (r)             - Reload zsh configuration"
+            echo "  regen-completions (rc) - Regenerate completion dumps"
             echo "  doctor (d)             - Check dotfiles health"
             echo "  update (u)             - Update dotfiles and plugins"
             echo "  cement                 - Lock current plugin versions"
             echo "  uninstall              - Remove dotfiles"
-            echo "  regen-completions (rc) - Regenerate completion dumps"
             return 1
             ;;
     esac
