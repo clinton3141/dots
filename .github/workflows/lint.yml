@@ -1,0 +1,24 @@
+name: Lint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  zsh-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install zsh
+        run: sudo apt-get install -y zsh
+
+      - name: Check zsh syntax
+        run: |
+          fail=0
+          while IFS= read -r -d '' file; do
+            if ! zsh -n "$file" 2>&1; then
+              fail=1
+            fi
+          done < <(find . -name '*.zsh' -print0)
+          exit $fail
