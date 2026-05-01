@@ -233,6 +233,30 @@ reload() {
     exec zsh
 }
 
+regenerate_completions() {
+    echo "🔄 Regenerating zsh completion dumps"
+
+    # Remove all zcompdump files
+    local zcompdump_files=(~/.zcompdump*(N))
+    if [[ ${#zcompdump_files[@]} -gt 0 ]]; then
+        echo "🗑️ Removing existing completion dumps:"
+        for file in "${zcompdump_files[@]}"; do
+            echo "   - $(basename "$file")"
+            rm -f "$file"
+        done
+    else
+        echo "ℹ️ No existing completion dumps found"
+    fi
+
+    # Regenerate completions
+    echo "🔨 Running compinit to regenerate completions..."
+    autoload -Uz compinit
+    compinit
+
+    echo "✅ Completion dumps regenerated successfully"
+    echo "💡 Reload your shell with 'exec zsh' or 'dots reload' to apply changes"
+}
+
 function dots() {
     case "$1" in
         reload|r)
@@ -251,8 +275,19 @@ function dots() {
         uninstall)
             uninstall
             ;;
+        regen-completions|rc)
+            regenerate_completions
+            ;;
         *)
-            echo "Usage: dots {reload|doctor|update|cement|uninstall}"
+            echo "Usage: dots {reload|doctor|update|cement|uninstall|regen-completions}"
+            echo ""
+            echo "Commands:"
+            echo "  reload (r)             - Reload zsh configuration"
+            echo "  regen-completions (rc) - Regenerate completion dumps"
+            echo "  doctor (d)             - Check dotfiles health"
+            echo "  update (u)             - Update dotfiles and plugins"
+            echo "  cement                 - Lock current plugin versions"
+            echo "  uninstall              - Remove dotfiles"
             return 1
             ;;
     esac
@@ -262,3 +297,4 @@ alias ...='dots'
 alias .r='dots reload'
 alias .d='dots doctor'
 alias .u='dots update'
+alias .rc='dots regen-completions'
