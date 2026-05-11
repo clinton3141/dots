@@ -9,14 +9,7 @@ if command -v eza >/dev/null 2>&1; then
     # Mix zoxide frecent dirs into ls/eza tab completion (compdef registered in syntax-highlighting.zsh after compinit)
     _ls_zoxide() {
         _files
-        local -a zoxide_dirs
-        local query="${PREFIX}${SUFFIX}"
-        if [[ -n "$query" ]]; then
-            zoxide_dirs=(${(f)"$(zoxide query -l -- "$query" 2>/dev/null)"})
-        else
-            zoxide_dirs=(${(f)"$(zoxide query -l 2>/dev/null)"})
-        fi
-        (( $#zoxide_dirs )) && compadd -U -X '[frecent dirs]' -- "${zoxide_dirs[@]}"
+        _zoxide_compadd
     }
 else
     # Fallback to standard ls with color output if available
