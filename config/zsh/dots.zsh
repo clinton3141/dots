@@ -136,17 +136,29 @@ doctor() {
         echo "❌ delta.navigate is not set to true"
         echo "fix by running: 'git config --global delta.navigate true'"
     fi
-    if [[ "$(git config --global pull.rebase)" == "true" ]]; then
-        echo "✅ pull.rebase is set to true"
+    if [[ "$(git config --global pull.rebase)" == "false" ]]; then
+        echo "✅ pull.rebase is set to false"
     else
-        echo "❌ pull.rebase is not set to true"
-        echo "fix by running: 'git config --global pull.rebase true'"
+        echo "❌ pull.rebase is not set to false"
+        echo "fix by running: 'git config --global pull.rebase false'"
+    fi
+    if [[ "$(git config --global pull.ff)" == "only" ]]; then
+        echo "✅ pull.ff set to only"
+    else
+        echo "❌ pull.ff is not set to only"
+        echo "fix by running: 'git config --global pull.ff only'"
     fi
     if [[ "$(git config --global init.defaultBranch)" == "main" ]]; then
         echo "✅ init.defaultBranch is set to main"
     else
         echo "❌ init.defaultBranch is not set to main"
         echo "fix by running: 'git config --global init.defaultBranch main'"
+    fi
+    if [[ "$(git config --global push.autoSetupRemote)" == "true" ]]; then
+        echo "✅ push.autoSetupRemote is set to true"
+    else 
+        echo "❌ push.autoSetupRemote is not set to true"
+        echo "fix by running: 'git config --global push.autoSetupRemote true'"
     fi
     if [[ "$(git config --global rerere.enabled)" == "true" ]]; then
         echo "✅ rerere.enabled is set to true"
