@@ -1,4 +1,4 @@
-zinit ice wait"0" lucid ver"$DOTS_FZF_TAB_HASH"
+zinit ice wait"0" lucid blockf ver"$DOTS_FZF_TAB_HASH"
 zinit load Aloxaf/fzf-tab
 
 zstyle ':completion:*' menu no

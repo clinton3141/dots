@@ -8,6 +8,8 @@ setopt AUTO_PARAM_SLASH
 unsetopt MENU_COMPLETE
 unsetopt FLOW_CONTROL
 
+[[ -d ~/.zsh/cache ]] || mkdir -p ~/.zsh/cache
+
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
 

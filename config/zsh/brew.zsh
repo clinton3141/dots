@@ -15,10 +15,9 @@ if [[ -n "$HOMEBREW_PREFIX" ]]; then
 fi
 
 # Homebrew shell completions
+# Add to fpath - compinit will be called later by zinit
 if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
     fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
-    autoload -Uz compinit
-    compinit -u
 fi
 
 # Homebrew environment variables

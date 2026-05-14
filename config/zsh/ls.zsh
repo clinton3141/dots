@@ -5,6 +5,12 @@ if command -v eza >/dev/null 2>&1; then
     alias lt='eza --tree --color=auto --group-directories-first --icons auto'
     alias lg='eza -l --git --color=auto --group-directories-first --icons auto'
     alias lh='eza -la --header --color=auto --group-directories-first --icons auto'
+
+    # Mix zoxide frecent dirs into ls/eza tab completion (compdef registered in syntax-highlighting.zsh after compinit)
+    _ls_zoxide() {
+        _files
+        _zoxide_compadd
+    }
 else
     # Fallback to standard ls with color output if available
     if command -v ls > /dev/null; then
