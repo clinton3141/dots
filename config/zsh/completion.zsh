@@ -1,3 +1,6 @@
+# Disable compaudit security warnings for Homebrew-managed completions
+ZSH_DISABLE_COMPFIX=true
+
 setopt COMPLETE_ALIASES
 setopt COMPLETE_IN_WORD
 setopt ALWAYS_TO_END
