@@ -57,6 +57,9 @@ Trial mode allows you to safely test these dotfiles without permanently changing
   - `zsh/` - zsh configuration modules
   - `tmux/` - tmux configuration
   - `zsh-abbr/` - abbreviation database
+  - `agents/` - shared coding agent config: working agreements and skills
+    (linked into `~/.claude/`, `~/.copilot/` and `~/.agents/`)
+  - `claude/` - Claude Code specific config (`~/.claude/`)
 - `custom/` - custom scripts and local overrides
 
 ## Tools

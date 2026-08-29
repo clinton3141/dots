@@ -179,6 +179,71 @@ main() {
 
     create_symlink "$DOTFILES_DIR/custom" "$HOME/.config/dots/custom" || true
 
+    if [[ ! -d "$HOME/.claude" ]]; then
+        echo "📁 Creating ~/.claude directory"
+        command mkdir -p "$HOME/.claude"
+        echo "✅ Created ~/.claude directory"
+    else
+        echo "📁 ~/.claude directory already exists"
+    fi
+
+    if [[ ! -d "$HOME/.agents" ]]; then
+        echo "📁 Creating ~/.agents directory"
+        command mkdir -p "$HOME/.agents"
+        echo "✅ Created ~/.agents directory"
+    else
+        echo "📁 ~/.agents directory already exists"
+    fi
+
+    if [[ ! -d "$HOME/.copilot/instructions" ]]; then
+        echo "📁 Creating ~/.copilot/instructions directory"
+        command mkdir -p "$HOME/.copilot/instructions"
+        echo "✅ Created ~/.copilot/instructions directory"
+    else
+        echo "📁 ~/.copilot/instructions directory already exists"
+    fi
+
+    claude_files=(
+        "settings.json"
+        "statusline.sh"
+    )
+
+    for file in "${claude_files[@]}"; do
+        create_symlink "$DOTFILES_DIR/config/claude/$file" "$HOME/.claude/$file" || true
+    done
+
+    # one source of truth, read by Claude Code as memory and by Copilot's
+    # default harness as an instructions file
+    create_symlink "$DOTFILES_DIR/config/agents/agreements.md" \
+        "$HOME/.claude/CLAUDE.md" || true
+
+    create_symlink "$DOTFILES_DIR/config/agents/agreements.md" \
+        "$HOME/.copilot/instructions/agreements.instructions.md" || true
+
+    create_symlink "$DOTFILES_DIR/config/agents/skill-lock.json" "$HOME/.agents/.skill-lock.json" || true
+
+    if command -v npx >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
+        echo "📦 Restoring Claude Code skills from skill-lock.json"
+        jq -r '.skills | to_entries | group_by(.value.source) | .[] | "\(.[0].value.source)\t\(map(.key) | join(","))"' \
+            "$DOTFILES_DIR/config/agents/skill-lock.json" \
+        | while IFS=$'\t' read -r skill_source skill_names; do
+            echo "📦 Installing $skill_names from $skill_source"
+            if command npx --yes skills add -g "$skill_source" --skill "$skill_names" -y; then
+                echo "✅ $skill_source skills installed"
+            else
+                echo "⚠️  failed to install skills from $skill_source"
+            fi
+        done
+    else
+        echo "⚠️  npx and jq are required to restore Claude Code skills - skipping"
+    fi
+
+    command mkdir -p "$HOME/.agents/skills"
+    for skill in "$DOTFILES_DIR"/config/agents/skills/*(/N); do
+        create_symlink "$skill" "$HOME/.agents/skills/${skill:t}" || true
+    done
+
+
     echo ""
     echo "⚠️ GIT CONFIG IS NOT YET AUTOMATED"
     echo "💡 use 'dots doctor' to check recommended settings"
