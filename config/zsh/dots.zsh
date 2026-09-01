@@ -4,6 +4,9 @@ source "$DOTFILES_DIR/dots/dots.lock"
 source "$DOTFILES_DIR/lib/trial.zsh"
 source "$DOTFILES_DIR/lib/cement.zsh"
 source "$DOTFILES_DIR/lib/uninstall.zsh"
+source "$DOTFILES_DIR/lib/link.zsh"
+source "$DOTFILES_DIR/lib/skills.zsh"
+source "$DOTFILES_DIR/lib/vscode.zsh"
 
 check_symlink_health() {
     local target="$1"
@@ -59,28 +62,24 @@ doctor() {
     echo ""
     echo "🔗 SYMLINKS"
 
-    local root_dotfiles=(
-        "zshrc"
-        "tmux.conf"
-    )
-
-    local configs=(
-        "zsh"
-        "tmux"
-        "zsh-abbr"
-        "starship.toml"
-    )
-
-    for file in "${root_dotfiles[@]}"; do
-        check_symlink_health "$HOME/.$file" "$DOTFILES_DIR/dots/$file" "~/.$file"
+    local entry source target
+    for entry in ${(f)"$(dots_link_map "$DOTFILES_DIR")"}; do
+        source="${entry%%$'\t'*}"
+        target="${entry#*$'\t'}"
+        check_symlink_health "$target" "$source" "${target/#$HOME/~}"
     done
 
-    for config in "${configs[@]}"; do
-        check_symlink_health "$HOME/.config/$config" "$DOTFILES_DIR/config/$config" "~/.config/$config"
-    done
-
-    # Check custom directory symlink
-    check_symlink_health "$HOME/.config/dots/custom" "$DOTFILES_DIR/custom" "~/.config/dots/custom"
+    echo ""
+    echo "🆚 VS CODE"
+    local vscode_setting="$(dots_vscode_setting_value)"
+    case "$vscode_setting" in
+        true)  echo "✅ $DOTS_VSCODE_SETTING is enabled" ;;
+        unset|false)
+            echo "❌ $DOTS_VSCODE_SETTING is $vscode_setting - ~/.claude/CLAUDE.md is ignored in VS Code"
+            echo "fix by running: 'dots link'"
+            ;;
+        *) echo "⚠️ could not read $(dots_vscode_settings_file)" ;;
+    esac
 
     echo ""
     echo "📦 TMUX"
@@ -227,15 +226,38 @@ doctor() {
     fi
 }
 
+# named link_dots, not link, so it does not shadow the link(1) utility
+link_dots() {
+    echo "🔗 Linking dotfiles"
+    DOTS_PROBLEMS=()
+    dots_link_all
+    dots_enable_vscode_claude_md
+    dots_report_problems
+}
+
 update() {
     echo "🏗️ Updating dotfiles"
+    DOTS_PROBLEMS=()
     git -C $DOTFILES_DIR pull
     echo "✅ Dotfiles git repository updated"
+
+    # a pull can add files that have never been linked; without this the new
+    # config sits in the repo and never reaches $HOME
+    echo "🔗 Linking dotfiles"
+    dots_link_all
+    dots_restore_skills "$DOTFILES_DIR"
+    dots_enable_vscode_claude_md
 
     echo "🔌 Updating Zinit and plugins"
     zinit self-update
     zinit update --all
     echo "✅ Zinit and all plugins updated"
+
+    if ! dots_report_problems; then
+        echo ""
+        echo "❌ Dotfiles update finished with problems - see above"
+        return 1
+    fi
 
     echo "✅ Dotfiles update completed."
 }
@@ -278,8 +300,10 @@ function dots() {
             doctor
             ;;
         update|u)
-            update
-            reload
+            update && reload
+            ;;
+        link|l)
+            link_dots
             ;;
         cement)
             cement
@@ -291,12 +315,13 @@ function dots() {
             regenerate_completions
             ;;
         *)
-            echo "Usage: dots {reload|doctor|update|cement|uninstall|regen-completions}"
+            echo "Usage: dots {reload|doctor|link|update|cement|uninstall|regen-completions}"
             echo ""
             echo "Commands:"
             echo "  reload (r)             - Reload zsh configuration"
             echo "  regen-completions (rc) - Regenerate completion dumps"
             echo "  doctor (d)             - Check dotfiles health"
+            echo "  link (l)               - Create any missing symlinks"
             echo "  update (u)             - Update dotfiles and plugins"
             echo "  cement                 - Lock current plugin versions"
             echo "  uninstall              - Remove dotfiles"
@@ -309,4 +334,5 @@ alias ...='dots'
 alias .r='dots reload'
 alias .d='dots doctor'
 alias .u='dots update'
+alias .l='dots link'
 alias .rc='dots regen-completions'
