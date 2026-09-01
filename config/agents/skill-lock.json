@@ -9,7 +9,7 @@
       "skillFolderHash": "3df14e2d3a89459bf300614be9247e3ce74798f8",
       "pluginName": "mattpocock-skills",
       "installedAt": "2026-08-29T10:00:38.002Z",
-      "updatedAt": "2026-08-29T10:00:38.002Z"
+      "updatedAt": "2026-09-01T18:52:57.018Z"
     },
     "grilling": {
       "source": "mattpocock/skills",
@@ -19,7 +19,7 @@
       "skillFolderHash": "f0732035b8b1b60ae39454e4191caef32fa91903",
       "pluginName": "mattpocock-skills",
       "installedAt": "2026-08-29T10:00:38.004Z",
-      "updatedAt": "2026-08-29T10:00:38.004Z"
+      "updatedAt": "2026-09-01T18:52:57.018Z"
     },
     "grill-with-docs": {
       "source": "mattpocock/skills",
@@ -29,7 +29,7 @@
       "skillFolderHash": "eedaf2562c83155115e9c649fa3ecaac2e10e81d",
       "pluginName": "mattpocock-skills",
       "installedAt": "2026-08-29T10:00:38.005Z",
-      "updatedAt": "2026-08-29T10:00:38.005Z"
+      "updatedAt": "2026-09-01T18:52:57.017Z"
     },
     "handoff": {
       "source": "mattpocock/skills",
@@ -39,7 +39,7 @@
       "skillFolderHash": "2242e8f05424b8c2ae94194a90d97b88d16108ec",
       "pluginName": "mattpocock-skills",
       "installedAt": "2026-08-29T10:00:38.005Z",
-      "updatedAt": "2026-08-29T10:00:38.005Z"
+      "updatedAt": "2026-09-01T18:52:57.018Z"
     },
     "to-spec": {
       "source": "mattpocock/skills",
@@ -49,7 +49,7 @@
       "skillFolderHash": "136b9651747cfccbfbb7c50a6b0dfb757e7547d2",
       "pluginName": "mattpocock-skills",
       "installedAt": "2026-08-29T10:00:38.006Z",
-      "updatedAt": "2026-08-29T10:00:38.006Z"
+      "updatedAt": "2026-09-01T18:52:57.018Z"
     },
     "to-tickets": {
       "source": "mattpocock/skills",
@@ -59,7 +59,7 @@
       "skillFolderHash": "b32c94e5a51c24ee9c41fcb7fe9ea9fff9af6369",
       "pluginName": "mattpocock-skills",
       "installedAt": "2026-08-29T10:00:38.006Z",
-      "updatedAt": "2026-08-29T10:00:38.006Z"
+      "updatedAt": "2026-09-01T18:52:57.018Z"
     },
     "find-skills": {
       "source": "vercel-labs/skills",
@@ -68,7 +68,7 @@
       "skillPath": "skills/find-skills/SKILL.md",
       "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
       "installedAt": "2026-08-29T10:00:41.738Z",
-      "updatedAt": "2026-08-29T10:00:41.738Z"
+      "updatedAt": "2026-09-01T18:52:58.108Z"
     }
   },
   "dismissed": {

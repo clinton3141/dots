@@ -224,11 +224,19 @@ main() {
 
     if command -v npx >/dev/null 2>&1 && command -v jq >/dev/null 2>&1; then
         echo "📦 Restoring Claude Code skills from skill-lock.json"
-        jq -r '.skills | to_entries | group_by(.value.source) | .[] | "\(.[0].value.source)\t\(map(.key) | join(","))"' \
+        jq -r '.skills | to_entries | group_by(.value.source) | .[] | "\(.[0].value.source)\t\(map(.key) | join(" "))"' \
             "$DOTFILES_DIR/config/agents/skill-lock.json" \
         | while IFS=$'\t' read -r skill_source skill_names; do
             echo "📦 Installing $skill_names from $skill_source"
-            if command npx --yes skills add -g "$skill_source" --skill "$skill_names" -y; then
+            # --skill takes one name per flag; a comma-joined list is read as a
+            # single literal skill name and matches nothing
+            skill_args=()
+            for skill_name in ${=skill_names}; do
+                skill_args+=(--skill "$skill_name")
+            done
+            # </dev/null: npx would otherwise read the loop's stdin and eat the
+            # remaining sources
+            if command npx --yes skills add -g "$skill_source" "${skill_args[@]}" -y </dev/null; then
                 echo "✅ $skill_source skills installed"
             else
                 echo "⚠️  failed to install skills from $skill_source"
