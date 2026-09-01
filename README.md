@@ -11,9 +11,15 @@ Personal shell configuration for zsh and CLI tools.
 ```
 
 This will:
-- Initialize and update git submodules
 - Create symlinks for configuration files
+- Install the tmux plugins pinned in `dots/dots.lock`
+- Restore the agent skills listed in `config/agents/skill-lock.json`
+- Enable `chat.useClaudeMdFile` in your VS Code user settings
 - Automatically reload the shell
+
+Anything it cannot do unattended - a target that already exists and is not a
+symlink, a missing dependency - is listed in a summary at the end, and the
+script exits non-zero.
 
 ### Trial Mode Installation (Recommended for First Time)
 
@@ -61,12 +67,15 @@ Trial mode allows you to safely test these dotfiles without permanently changing
     (linked into `~/.claude/`, `~/.copilot/` and `~/.agents/`)
   - `claude/` - Claude Code specific config (`~/.claude/`)
 - `custom/` - custom scripts and local overrides
+- `lib/` - installer internals shared by `install.zsh` and `dots`
+  - `link.zsh` - the symlink map, used by install, `dots link` and `dots doctor`
 
 ## Tools
 
 - `dots` or `...` is a utility to manage the project
   - `dots reload` - reloads the config. Aliased to `.r`
   - `dots doctor` - some simple health checks. Aliased to `.d`
-  - `dots update` - get the latest config. Aliased to `.u`
+  - `dots link` - create any symlinks that are missing, and repair broken ones. Aliased to `.l`
+  - `dots update` - get the latest config, then link it. Aliased to `.u`
   - `dots cement` - complete trial and commit to dotfiles (make installation permanent)
   - `dots uninstall` - uninstall dotfiles and restore original setup (trial mode only)
