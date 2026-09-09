@@ -59,5 +59,9 @@
         "raw.githubusercontent.com"
       ]
     }
+  },
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
   }
 }
