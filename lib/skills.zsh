@@ -27,7 +27,8 @@ dots_restore_skills() {
 
     local -a sources=( ${(f)grouped} )
 
-    local entry skill_source skill_names skill_name
+    local entry skill_source skill_names skill_name install_status
+    local log="${TMPDIR:-/tmp}/dots-skills-$$.log"
     local -a skill_args
     for entry in $sources; do
         skill_source="${entry%%$'\t'*}"
@@ -41,12 +42,27 @@ dots_restore_skills() {
             skill_args+=(--skill "$skill_name")
         done
 
+        # explicit --agent skips the CLI's auto-detection, which otherwise fans
+        # out to every "universal" agent - including promptscript, which has no
+        # global skills dir and so fails once per skill. universal covers codex,
+        # copilot, cursor, zed et al, which all share ~/.agents/skills; any
+        # non-universal agent beyond claude-code must be added here by hand.
         # </dev/null so npx can never stop for a prompt
-        if command npx --yes skills add -g "$skill_source" "${skill_args[@]}" -y </dev/null; then
-            echo "✅ $skill_source skills installed"
-        else
+        command npx --yes skills add -g "$skill_source" \
+            --agent claude-code --agent universal \
+            "${skill_args[@]}" -y </dev/null 2>&1 | tee "$log"
+
+        # the CLI exits 0 even when individual skills fail, so its output is the
+        # only signal we have. $pipestatus[1] because $? here is tee's
+        install_status=$pipestatus[1]
+        if (( install_status != 0 )); then
             DOTS_PROBLEMS+=("failed to install skills from $skill_source")
+        elif grep -q "Failed to install" "$log"; then
+            DOTS_PROBLEMS+=("some skills from $skill_source did not install - see output above")
+        else
+            echo "✅ $skill_source skills installed"
         fi
+        rm -f "$log"
     done
 
     return 0
